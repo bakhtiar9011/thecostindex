@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from './supalib.js';
 
 const supabaseUrl = 'https://qgzytdvnjnuwbhpvndyn.supabase.co';
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY; // Use secure key from Vercel env vars
