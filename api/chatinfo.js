@@ -31,4 +31,22 @@ Additional: ${additional ? Object.entries(additional).map(([cat, items]) =>
       },
       body: JSON.stringify({
         model: "gpt-4",
-        messa
+        messages: [
+          { role: "system", content: "You are a helpful assistant that answers based on provided personal information." },
+          { role: "user", content: `${context}\nQuestion: ${text}` }
+        ],
+        temperature: 0.7,
+        max_tokens: 300
+      }),
+    });
+
+    const data = await openaiRes.json();
+    console.log("OpenAI raw response:", JSON.stringify(data, null, 2)); // Debug logs
+
+    const reply = data?.choices?.[0]?.message?.content?.trim() || "No content returned";
+    return res.status(200).json({ reply });
+  } catch (err) {
+    console.error("OpenAI API error:", err);
+    return res.status(500).json({ error: err.message });
+  }
+}
