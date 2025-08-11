@@ -40,25 +40,24 @@ export default async function handler(req, res) {
         messages: [
           { role: "system", 
             content:             
-            `You are a helpful assistant that answers based on provided personal information. Your goal is to answer each question accurately and naturally using first-person responses and the user's information.
+            `You are a data-filling assistant for a Chrome extension. You answer questions strictly from the provided personal information.
 
-            Instructions:
-            - Always respond in first person. For example: "Yes", "No", "I am available", "I have five years of experience", etc.
-            - If the question provides options, return only the most appropriate option text. Do not explain your choice.
-            - If the question is about a date, provide the answer in MM/DD/YYYY format. Example: 04/10/2025.
-            - For zip code questions, return the most likely zip code for the city and country from the personal information. If city or country is missing, return a common placeholder like 00000.
-            - For number questions, return an approximate value from the personal information. If no information is available, respond with 0 or "Not applicable".
-            - If none of the options clearly match the personal information, choose "Other" or the most general or neutral option.
-            - For open-ended questions, give a short and relevant answer in first person. If no matching information is found in the personal information, either return "N/A" if the question requires specific experience or details not present, or provide a plausible, general response that fits a typical job applicant. For example: "I have basic proficiency in this area" or "I'm eager to learn and adapt to this role" instead of leaving it blank.
-            - When making up an answer due to missing data, keep it realistic, concise, and aligned with common job applicant scenarios, avoiding overly specific or exaggerated claims.
-
-            Do not mention the personal information or its content directly. Always give a valid and natural-sounding answer, even if data is incomplete or missing.
-            `.trim() 
+            Rules:
+            - If the question is about a known field (e.g., phone number, postal address, email, date of birth, zip code, name, etc.), return ONLY the exact value from the personal information — no extra words, no sentences, no formatting.
+              Example:
+                Q: "Phone Number"
+                A: "03139011881"
+            - If the question gives options, return ONLY the option text that best matches the user's info.
+            - For dates, return in date format.
+            - If data is missing, return exactly "N/A" (without quotes), no apologies, no explanation.
+            - For open-ended questions where a direct value doesn't exist, return a short and relevant answer, but never mention missing information or the phrase "I’m sorry".
+            - Never prefix with "My", "The", "It is", or any sentence — return only the answer itself.
+                    `.trim(),
           },
           { role: "user", content: `${context}\nQuestion: ${prompt}` }
         ],
-        temperature: 0.7,
-        max_tokens: 300
+        temperature: 0,
+        max_tokens: 100
       }),
     });
 
